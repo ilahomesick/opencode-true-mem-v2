@@ -1,7 +1,6 @@
 {
   "name": "opencode-true-mem-v2",
   "version": "0.1.0",
-  "private": true,
   "description": "OpenCode V2 port of true-mem — persistent cognitive memory plugin (fork of rizal72/true-mem)",
   "main": "dist/entry.js",
   "type": "module",
@@ -28,6 +27,9 @@
   ],
   "author": "rizal72",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ilahomesick/opencode-true-mem-v2.git"
@@ -39,7 +41,8 @@
   "files": [
     "dist/",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "PORT-NOTES.md"
   ],
   "dependencies": {
     "@huggingface/transformers": "^4.0.0-next.1",
