@@ -31,6 +31,9 @@ const CLASSIFICATION_KEYWORDS: Record<string, { primary: string[]; boosters: str
       'yesterday', 'today', 'we did', 'we made', 'we worked',
       'during the session', 'in the meeting', 'this time', 'just now',
       'we fixed', 'we refactored', 'we implemented',
+      // Spanish
+      'ayer', 'hoy', 'esta sesión', 'en esta sesión', 'ultima vez',
+      'acabamos de', 'estuvimos',
     ],
     boosters: [
       'session', 'call', 'meeting', 'riunione', 'sessione',
@@ -39,19 +42,19 @@ const CLASSIFICATION_KEYWORDS: Record<string, { primary: string[]; boosters: str
     ],
   },
   decision: {
-    primary: ['decided', 'chose', 'selected', 'picked', 'opted', 'went with', 'deciso', 'scelto', 'selezionato'],
+    primary: ['decided', 'chose', 'selected', 'picked', 'opted', 'went with', 'deciso', 'scelto', 'selezionato', 'decidí', 'decidimos', 'vamos con', 'elegimos', 'usaremos', 'optamos por'],
     boosters: ['because', 'since', 'reason', 'rationale', 'due to', 'as', 'perché', 'poiché', 'motivo', 'ragione'],
   },
   learning: {
-    primary: ['learned', 'discovered', 'found out', 'realized', 'figured out', 'imparato', 'scoperto', 'capito'],
+    primary: ['learned', 'discovered', 'found out', 'realized', 'figured out', 'imparato', 'scoperto', 'capito', 'aprendí', 'aprendimos', 'descubrí', 'resulta que', 'la clave es', 'el truco es', 'darse cuenta'],
     boosters: ['today', 'just', 'finally', 'interesting', 'surprising', 'oggi', 'appena'],
   },
   constraint: {
-    primary: ["can't", 'cannot', 'must not', 'never', 'forbidden', 'prohibited', 'not allowed', 'non posso', 'vietato', 'proibito', 'obbligatorio'],
+    primary: ["can't", 'cannot', 'must not', 'never', 'forbidden', 'prohibited', 'not allowed', 'non posso', 'vietato', 'proibito', 'obbligatorio', 'nunca', 'jamás', 'no se permite', 'prohibido', 'no debe', 'no puedes', 'no se puede'],
     boosters: ['always', 'require', 'mandatory', 'enforce', 'strict', 'mai', 'necessario'],
   },
   preference: {
-    primary: ['prefer', 'like', 'want', 'favor', 'rather', 'preferisco', 'mi piace', 'voglio', 'prediligo'],
+    primary: ['prefer', 'like', 'want', 'favor', 'rather', 'preferisco', 'mi piace', 'voglio', 'prediligo', 'prefiero', 'prefiere', 'me gusta', 'no me gusta', 'quiero', 'mejor que', 'en vez de'],
     boosters: ['better', 'best', 'instead', 'over', 'more than', 'meglio', 'ottimo', 'invece', 'rispetto a', 'sempre'],
   },
   procedural: {
@@ -232,6 +235,12 @@ export function classifyWithExplicitIntent(
     /\bnote(?:\s+\w+){0,5}?\s+that\b:?\s*/gi,
     /\bdon'?t forget\b:?\s*/gi,
     /\bmake sure to remember\b:?\s*/gi,
+
+    // Spanish
+    /\brecuerda(?:\s+\w+){0,5}?\s+(?:que|esto|siempre)\b:?\s*/gi,
+    /\brecuerda esto\b:?\s*/gi,
+    /\bno olvides(?:\s+\w+){0,5}?\s+(?:que|de)?\b:?\s*/gi,
+    /\bten(?:\s+\w+){0,5}?\s+en cuenta\b:?\s*/gi,
   ];
 
   // Find the FIRST occurrence of any explicit remember marker in the entire text

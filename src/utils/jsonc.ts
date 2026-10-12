@@ -18,12 +18,16 @@ import { log } from '../logger.js';
 export function parseJsonc<T>(content: string): T {
   // Remove single-line comments (// ...)
   const noSingleLine = content.replace(/\/\/.*$/gm, '');
-  
+
   // Remove multi-line comments (/* ... */)
   const noComments = noSingleLine.replace(/\/\*[\s\S]*?\*\//g, '');
-  
+
+  // Remove trailing commas (", }" / ", ]") left behind by comment stripping
+  // or handwritten JSONC
+  const noTrailingCommas = noComments.replace(/,(\s*[}\]])/g, '$1');
+
   try {
-    return JSON.parse(noComments) as T;
+    return JSON.parse(noTrailingCommas) as T;
   } catch (err) {
     log(`JSONC parse error: ${err}`);
     throw err;
