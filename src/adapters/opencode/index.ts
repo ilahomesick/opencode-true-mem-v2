@@ -742,7 +742,7 @@ async function processSessionIdle(
   // Debounce window is open again - drop any pending retry bookkeeping.
   clearExtractionRetry(effectiveSessionId);
 
-  const watermark = state.db.getMessageWatermark(effectiveSessionId);
+  const storedWatermark = state.db.getMessageWatermark(effectiveSessionId);
 
   let messages: MessageContainer[];
   try {
@@ -755,6 +755,16 @@ async function processSessionIdle(
   } catch (error) {
     log(`Failed to fetch messages: ${error}`);
     return;
+  }
+
+  // The host can prune the transcript (e.g. after compaction), so the message
+  // count can drop BELOW the stored watermark. Comparing against the stale
+  // value would silently skip extraction forever. Rescan from the start and
+  // let the per-pass text dedupe collapse anything already seen.
+  let watermark = storedWatermark;
+  if (messages && messages.length < storedWatermark) {
+    log(`Watermark reset: transcript pruned (${storedWatermark} > ${messages.length} messages), rescanning from 0`);
+    watermark = 0;
   }
 
   if (!messages || messages.length <= watermark) return;
